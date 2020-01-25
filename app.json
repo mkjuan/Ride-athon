@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "stackathon",
-    "slug": "stackathon",
+    "name": "Ride-athon",
+    "slug": "Rideathon",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -24,7 +24,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyDLf1N2ouAEInPOkTtHtfopKIsjACVU394"
+      }
     }
   }
 }
