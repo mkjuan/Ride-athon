@@ -48,12 +48,6 @@ export default class Login extends Component {
           >
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
-            onPress={this.props.handleSignUp}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Create Account</Text>
-          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={this.props.handleGuestPassenger}
             style={styles.button}

@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 2.0,
     width: (WIDTH)-200,
-    height: 40,
+    height: 35,
     top: HEIGHT-98,
     borderRadius: 10,
     alignItems: 'center',

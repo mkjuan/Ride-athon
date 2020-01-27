@@ -25,31 +25,6 @@ export default class DestinationButton extends Component {
           </View>
           <View style={styles.listContainer}>
             {this.props.predictions}
-            {/* <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.highlight}>
-                <Text style={styles.suggestionText}>Fullstack Academy</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.highlight}>
-                <Text style={styles.suggestionText}>Central Park</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.highlight}>
-                <Text style={styles.suggestionText}>Fuller</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.highlight}>
-                <Text style={styles.suggestionText}>Type</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.highlight}>
-                <Text style={styles.suggestionText}>Suggest</Text>
-              </TouchableOpacity>
-            </View> */}
           </View>
         </View>
       </View>
@@ -70,7 +45,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     width: (WIDTH)-40,
-    height: 60,
+    height: 45,
     backgroundColor: 'black',
     top: 90,
     left: 20,
@@ -82,7 +57,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'android'
       ? 'sans-serif-light'
       : 'Helvetica-Light',
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
     paddingLeft: 20,
     width: WIDTH-40,

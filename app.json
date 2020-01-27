@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Ride-athon",
-    "slug": "Rideathon",
+    "slug": "Ride-athon",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -24,10 +24,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "config": {
-        "googleMapsApiKey": "AIzaSyDLf1N2ouAEInPOkTtHtfopKIsjACVU394"
-      }
+      "supportsTablet": true
     }
   }
 }

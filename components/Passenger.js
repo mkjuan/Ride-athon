@@ -1,6 +1,6 @@
 import React, { Component }from 'react'
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps'
-import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight, TextInput, Dimensions, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight, TextInput, Dimensions, TouchableWithoutFeedback, Keyboard, Platform, TouchableHighlightBase } from 'react-native'
 import PolyLine from "@mapbox/polyline";
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
@@ -10,7 +10,11 @@ import { CallDriverButton } from './CallDriverButton'
 import { BackToLogin } from './BackToLogin'
 import { expo } from '../app.json'
 
-const apiKey = expo.ios.config.googleMapsApiKey
+if(process.env !== 'development') {
+  require('../secrets')
+}
+
+const apiKey = process.env.APIKEY
 const WIDTH = Dimensions.get('window').width
 
 export default class Passenger extends Component {
@@ -34,7 +38,7 @@ export default class Passenger extends Component {
   }
 
   async componentDidMount() {
-    this.getInitialLocation()
+    await this.getInitialLocation()
     this.watchId = navigator.geolocation.watchPosition(
       position => {
         this.setState({
@@ -62,8 +66,9 @@ export default class Passenger extends Component {
       hasPermission: true
     }))
 
-    const location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true })
-
+    const location = await Location.getCurrentPositionAsync({ maximumAge: 60000,
+      accuracy: Platform.OS === 'android' ? Location.Accuracy.Low : Location.Accuracy.Lowest })
+    console.log(location)
     this.setState({
       region: {
         latitude: location.coords.latitude,
@@ -99,7 +104,6 @@ export default class Passenger extends Component {
         this.setState({
           predictions: json.predictions
         })
-        // console.log(json)
       } catch (err) {
         console.error(err)
       }
@@ -122,7 +126,6 @@ export default class Passenger extends Component {
       const routeCoords = points.map(point => {
         return { latitude: point[0], longitude: point[1] }
       })
-      console.log(routeCoords)
       this.setState({
         routeCoords,
         routeResponse: json
@@ -156,7 +159,7 @@ export default class Passenger extends Component {
 
   render() {
     const predictions = this.state.predictions.map(prediction => (
-      <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer} key={prediction.id}>
         <TouchableHighlight style={styles.highlight}
           onPress={async () => {
             const destinationName = await this.getRouteDirections(
@@ -167,9 +170,7 @@ export default class Passenger extends Component {
             this.map.fitToCoordinates(this.state.routeCoords, {
               edgePadding: { top: 100, bottom: 100, left: 100, right: 100 }
             })
-          }}
-          key={prediction.id}
-        >
+          }}>
             <Text style={styles.suggestionText}>
               {prediction.structured_formatting.main_text}
             </Text>
@@ -177,22 +178,24 @@ export default class Passenger extends Component {
       </View>
     ))
 
-    return(
+    return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <DestinationButton destination={this.state.destination} handleChange={this.handleChange} lookingForDriver={this.state.lookingForDriver} onChangeDestination={this.onChangeDestination} predictions={predictions}/>
-          <BackToLogin passenger={this.props.passenger} handleGuestPassenger={this.props.handleGuestPassenger}/>
+          <BackToLogin passenger={this.props.passenger} handleGuestPassenger={this.props.handleGuestPassenger} lookingForDriver={this.state.lookingForDriver}/>
           <CurrentLocationButton centerCurrentLocation={this.centerCurrentLocation}/>
           <MapView style={styles.mapStyle}
             provider={PROVIDER_GOOGLE}
             showsUserLocation={true}
             rotateEnabled={false}
             initialRegion={this.state.region}
-            ref={(map) => {this.map = map}} >
+            ref={(map) => {this.map = map}}
+            >
             <Polyline
             coordinates={this.state.routeCoords}
             strokeWidth={3}
             strokeColor="black" />
+            <Marker coordinate={this.state.routeCoords[this.state.routeCoords.length-1]}/>
           </MapView>
           { this.state.destination
             ? <CallDriverButton hide={true} callDriver={this.callDriver} lookingForDriver= {this.state.lookingForDriver} />
@@ -221,7 +224,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     shadowColor: 'grey',
     width: WIDTH-40,
-    height: 50,
+    height: 40,
     top: 90,
     borderRadius: 10,
     alignItems: 'center',
@@ -233,6 +236,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   buttonContainer: {
-    marginTop: 51,
+    marginTop: 41,
   },
 })
