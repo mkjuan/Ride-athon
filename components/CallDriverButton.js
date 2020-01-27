@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'android'
     ? 'sans-serif-light'
     : 'Helvetica-Light',
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
     alignItems: 'center',
     justifyContent: 'center'

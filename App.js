@@ -3,6 +3,8 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import logo from './assets/logo.png';
 import Login from './components/Login'
 import Passenger from './components/Passenger'
+import firebaseConfig from './secrets'
+import * as firebase from 'firebase'
 
 export default class App extends Component {
   constructor() {
@@ -13,6 +15,8 @@ export default class App extends Component {
     }
     this.toggleLoggedIn = this.toggleLoggedIn.bind(this)
     this.handleGuestPassenger = this.handleGuestPassenger.bind(this)
+
+    if(!firebase.apps.length) {firebase.initializeApp(firebaseConfig)}
   }
 
   toggleLoggedIn() {

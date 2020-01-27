@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "ridathon-f14a1",
+    "public": "assets",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native'
+import { StyleSheet, View, Dimensions, TextInput } from 'react-native'
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     width: (WIDTH)-40,
     height: 45,
     backgroundColor: 'black',
-    top: 90,
+    top: 70,
     left: 20,
     borderRadius: 10,
     alignItems: 'center'

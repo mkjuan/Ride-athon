@@ -1,6 +1,7 @@
 import React, { Component }from 'react'
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps'
-import { StyleSheet, Text, View, TouchableOpacity, TouchableHighlight, TextInput, Dimensions, TouchableWithoutFeedback, Keyboard, Platform, TouchableHighlightBase } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, Dimensions,
+         TouchableWithoutFeedback, Keyboard, Platform } from 'react-native'
 import PolyLine from "@mapbox/polyline";
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
@@ -8,13 +9,12 @@ import DestinationButton from './DestinationButton'
 import { CurrentLocationButton } from './CurrentLocationButton'
 import { CallDriverButton } from './CallDriverButton'
 import { BackToLogin } from './BackToLogin'
-import { expo } from '../app.json'
 
 if(process.env !== 'development') {
   require('../secrets')
 }
 
-const apiKey = process.env.APIKEY
+const apiKey = process.env.GOOGLEAPIKEY
 const WIDTH = Dimensions.get('window').width
 
 export default class Passenger extends Component {
@@ -68,7 +68,6 @@ export default class Passenger extends Component {
 
     const location = await Location.getCurrentPositionAsync({ maximumAge: 60000,
       accuracy: Platform.OS === 'android' ? Location.Accuracy.Low : Location.Accuracy.Lowest })
-    console.log(location)
     this.setState({
       region: {
         latitude: location.coords.latitude,
@@ -171,9 +170,12 @@ export default class Passenger extends Component {
               edgePadding: { top: 100, bottom: 100, left: 100, right: 100 }
             })
           }}>
-            <Text style={styles.suggestionText}>
-              {prediction.structured_formatting.main_text}
-            </Text>
+        <Text style={styles.suggestionText}>
+          {prediction.structured_formatting.main_text}{"\n"}
+          <Text style={styles.destinationSpecifics}>
+            {prediction.description.slice(prediction.description.indexOf(',')+2)}
+          </Text >
+        </Text>
         </TouchableHighlight>
       </View>
     ))
@@ -193,9 +195,12 @@ export default class Passenger extends Component {
             >
             <Polyline
             coordinates={this.state.routeCoords}
-            strokeWidth={3}
+            strokeWidth={4}
             strokeColor="black" />
-            <Marker coordinate={this.state.routeCoords[this.state.routeCoords.length-1]}/>
+            { this.state.routeCoords.length
+              ? <Marker coordinate={this.state.routeCoords[this.state.routeCoords.length-1]}/>
+              : null
+            }
           </MapView>
           { this.state.destination
             ? <CallDriverButton hide={true} callDriver={this.callDriver} lookingForDriver= {this.state.lookingForDriver} />
@@ -232,10 +237,13 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 14,
     paddingLeft: 20,
   },
   buttonContainer: {
     marginTop: 41,
   },
+  destinationSpecifics: {
+    color: 'grey'
+  }
 })
