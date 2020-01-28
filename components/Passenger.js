@@ -9,6 +9,7 @@ import DestinationButton from './DestinationButton'
 import { CurrentLocationButton } from './CurrentLocationButton'
 import { CallDriverButton } from './CallDriverButton'
 import { BackToLogin } from './BackToLogin'
+import Axios from 'axios'
 
 if(process.env !== 'development') {
   require('../secrets')
@@ -98,10 +99,9 @@ export default class Passenger extends Component {
     if(destination.length > 3) {
       const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${apiKey}&input=${destination}&location=${this.state.region.latitude},${this.state.region.longitude}&radius=2000`
       try {
-        const result = await fetch(apiUrl)
-        const json = await result.json()
+        const res = await Axios.get(apiUrl)
         this.setState({
-          predictions: json.predictions
+          predictions: res.data.predictions
         })
       } catch (err) {
         console.error(err)
@@ -111,23 +111,20 @@ export default class Passenger extends Component {
 
   async getRouteDirections(destinationId, destinationName) {
     try {
-      const res = await fetch(
+      const res = await Axios.get(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${
           this.state.region.latitude
         },${
           this.state.region.longitude
         }&destination=place_id:${destinationId}&key=${apiKey}`
       )
-      // console.log(res)
-      const json = await res.json()
-      // console.log(json)
-      const points = PolyLine.decode(json.routes[0].overview_polyline.points)
+      const points = PolyLine.decode(res.data.routes[0].overview_polyline.points)
       const routeCoords = points.map(point => {
         return { latitude: point[0], longitude: point[1] }
       })
       this.setState({
         routeCoords,
-        routeResponse: json
+        routeResponse: res.data
       })
       Keyboard.dismiss()
       return destinationName

@@ -15,7 +15,6 @@ export default class App extends Component {
     }
     this.toggleLoggedIn = this.toggleLoggedIn.bind(this)
     this.handleGuestPassenger = this.handleGuestPassenger.bind(this)
-
     if(!firebase.apps.length) {firebase.initializeApp(firebaseConfig)}
   }
 
@@ -30,6 +29,14 @@ export default class App extends Component {
     if(this.state.passenger === 'guest') passenger = ''
     else passenger = 'guest'
     this.setState({ passenger })
+  }
+
+  async componentDidMount() {
+    await firebase.database().ref('users/1').set({
+      username: 'John',
+      email: 'mk@gmail.com',
+      password: 123
+    });
   }
 
   render() {
